@@ -82,30 +82,55 @@ app.layout = dbc.Container([
     ]),
     dbc.Row([
         dbc.Col(dcc.Markdown('''
-           
-             __Udgifter__
+             __Nuværende alder__
+             
+             Den giver vist sig selv...
+             
+             __Forventet levealder__
+             
+             Den alder hvor du forventer at skulle i graven.Dine investeringer skal ikke nå at gå i minus før du dør.
+             Er du rigtig dygtig, ender du omkring 0kr ;)
+                
+             __Nuværende værdi af investeringer__
+             
+             Din nuværende beholdning af aktiver. Beregneren antager at det hele står på et normalt aktiedepot.
+             
+             __Forventet årligt afkast før inflation__
+             
+             Hvor meget forventer du i gennemsnitligt årligt afkast på dine investeringer? Det afhænger af din porteføljesammensætning.
+             Mange regner med omkring 10% som gennemsnitligt markedsafkast for en bredt investeret globalportefølje.
+             
+             __Forventet årlig inflation__
+             
+             Hvilken gennemsnitlig årlig inflation forventer du? Historisk set har der været 2-3%.
+             
+             __Årlige udgifter__
             
-            Derudover har man mulighed for at indtaste årlige udgifter (efter skat), i selvvalgte intervaller af levetiden.
+            Du har mulighed for at indtaste årlige udgifter (efter skat), i selvvalgte intervaller af levetiden.
             Har man eksempelvis en forventning om at bruge 180.000kr årligt resten af livet kan man indtaste dette.
             Man kan også tilføje flere udgifter hvis man regner med at have variable udgifter i sin levetid.
             Det kunne eksempelvis være at man regner med at have en ekstra udgift på 60.000 kr årligt til barn
-            fra man er 30 år til man er 48 år.
+            fra man er 30 år til man er 48 år. Man kan således godt specificere overlappende udgifter.
+            Der er mulighed for at navngive de forskellige udgifter så man ikke mister overblikket.
             
-            __Lønindtægter__
+            __Årlige Lønindtægter__
             
             På samme måde som for udgifter, kan man specificere sin årlige lønindtægt i løbet af sin levetid.
             Bemærk at lønindtægter skal angives før skat, da modellen tager højde for beskatning.
             De første 48.000kr årligt beskattes således ikke men fratrækkes kun 8% i AM-bidrag. 
             Alt fra 48.000kr til topskattegrænsen på 568.900 fratrækkes først 8% AM-bidrag og beskattes efterfølgende med 38%.
             Alt over topskattegrænsen fratrækkes først 8% AM-bidrag, dernæst 15% topskat, og slutteligt 38% skat.
+            Man kan godt specificere overlappende indtægter.
             Modellen har på nuværende tidspunkt ikke mulighed for at specificere andre typer indtægter.
+            Der er mulighed for at navngive de forskellige indtægter så man ikke mister overblikket.
             
             __Investeringer__
             
             Modellen ser på de udgifter og indtægter som du har specificeret. Hvis dine lønindtægter efter
-            skat er højere end dine udgifter, så lægges overskuddet til dine investeringer. Hvis dine lønindtægter
-            ikke kan dække dine udgifter det pågældende år, beregnes det nødvendige udtræk fra dine investeringer,
-            for at kunne dække udgifterne efter skat.
+            skat er højere end dine udgifter, så lægges hele overskuddet til dine investeringer.
+            Ønsker du at lægge noget til side til en opsparing, kan dette angives som en udgift.
+            Hvis dine lønindtægter ikke kan dække dine udgifter det pågældende år, 
+            fratrækked det nødvendige udtræk fra dine investeringer, for at kunne dække udgifterne efter skat.
             Beregneren antager at dine aktiver står på et almindeligt aktiedepot og at du gør brug af
             værdipapirer som er realisationsbeskattede. Modellen tager højde for en progressionsgrænse for realiseret afkast.
             Alt afkast under progressionsgrænsen på 58.900kr beskattes med 27%. Alt afkast derover beskattes med 42%.
@@ -126,7 +151,9 @@ def modify_expenses_container(add_clicks, remove_clicks, div_children):
     if triggered_id == "add-expense.n_clicks":
         # Add a new expense input field
         new_child = html.Div(children=[
-            html.Label(f"Udgift {len(div_children) + 1} (Efter skat): "),
+            html.Label(f"Udgift {len(div_children) + 1}: "),
+            dcc.Input(id=f"expense-name-{len(div_children)}", type="text", className="form-control mb-3", value="Beskrivende tekst (valgfri)"),
+            html.Label("Beløb årligt (Efter skat): "),
             dcc.Input(id=f"expense-{len(div_children)}", type="number", className="form-control mb-3"),
             html.Label("Alder hvor udgift starter: "),
             dcc.Input(id=f"age-expense-start-{len(div_children)}", type="number", className="form-control mb-3"),
@@ -150,7 +177,9 @@ def modify_income_container(add_clicks, remove_clicks, div_children):
     triggered_id = dash.callback_context.triggered[0]['prop_id']
     if triggered_id == "add-income.n_clicks":
         new_child = html.Div(children=[
-            html.Label(f"Lønindtægt {len(div_children) + 1} (Før skat): "),
+            html.Label(f"Lønindtægt {len(div_children) + 1}: "),
+            dcc.Input(id=f"income-name-{len(div_children)}", type="text", className="form-control mb-3", value="Beskrivende tekst (valgfri)"),
+            html.Label("Beløb årligt (Før skat): "),
             dcc.Input(id=f"income-{len(div_children)}", type="number", className="form-control mb-3"),
             html.Label("Alder hvor lønindtægt starter:"),
             dcc.Input(id=f"age-income-start-{len(div_children)}", type="number", className="form-control mb-3"),
