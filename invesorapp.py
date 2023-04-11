@@ -82,29 +82,29 @@ app.layout = dbc.Container([
     ]),
     dbc.Row([
         dbc.Col(dcc.Markdown('''
-             __Nuværende alder__
+             ##### Nuværende alder
              
              Den giver vist sig selv...
              
-             __Forventet levealder__
+             ##### Forventet levealder
              
              Den alder hvor du forventer at skulle i graven.Dine investeringer skal ikke nå at gå i minus før du dør.
              Er du rigtig dygtig, ender du omkring 0kr ;)
                 
-             __Nuværende værdi af investeringer__
+             ##### Nuværende værdi af investeringer
              
              Din nuværende beholdning af aktiver. Beregneren antager at det hele står på et normalt aktiedepot.
              
-             __Forventet årligt afkast før inflation__
+             ##### Forventet årligt afkast før inflation
              
              Hvor meget forventer du i gennemsnitligt årligt afkast på dine investeringer? Det afhænger af din porteføljesammensætning.
              Mange regner med omkring 10% som gennemsnitligt markedsafkast for en bredt investeret globalportefølje.
              
-             __Forventet årlig inflation__
+             ##### Forventet årlig inflation
              
              Hvilken gennemsnitlig årlig inflation forventer du? Historisk set har der været 2-3%.
              
-             __Årlige udgifter__
+             ##### Årlige udgifter
             
             Du har mulighed for at indtaste årlige udgifter (efter skat), i selvvalgte intervaller af levetiden.
             Har man eksempelvis en forventning om at bruge 180.000kr årligt resten af livet kan man indtaste dette.
@@ -113,7 +113,7 @@ app.layout = dbc.Container([
             fra man er 30 år til man er 48 år. Man kan således godt specificere overlappende udgifter.
             Der er mulighed for at navngive de forskellige udgifter så man ikke mister overblikket.
             
-            __Årlige Lønindtægter__
+            ##### Årlige Lønindtægter
             
             På samme måde som for udgifter, kan man specificere sin årlige lønindtægt i løbet af sin levetid.
             Bemærk at lønindtægter skal angives før skat, da modellen tager højde for beskatning.
@@ -124,7 +124,7 @@ app.layout = dbc.Container([
             Modellen har på nuværende tidspunkt ikke mulighed for at specificere andre typer indtægter.
             Der er mulighed for at navngive de forskellige indtægter så man ikke mister overblikket.
             
-            __Investeringer__
+            ##### Investeringer
             
             Modellen ser på de udgifter og indtægter som du har specificeret. Hvis dine lønindtægter efter
             skat er højere end dine udgifter, så lægges hele overskuddet til dine investeringer.
