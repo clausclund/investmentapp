@@ -335,7 +335,7 @@ def update_fig(calculate_button, current_age, final_age, current_investments, ex
     newnames = {'diff':'Balance', 'total_income_after': 'Indtægter efter skat','total_expence' : 'Udgifter efter skat'}
     
     trace1 = go.Scatter(x=data['ages'], y=data['total_income_after'], name=newnames['total_income_after'], line=dict(color='green', dash='dot'))
-    trace2 = go.Scatter(x=data['ages'], y=-data['total_expence'], name=newnames['total_expence'], line=dict(color='red', dash='dot'))
+    trace2 = go.Scatter(x=data['ages'], y=data['total_expence'], name=newnames['total_expence'], line=dict(color='red', dash='dot'))
     trace3 = go.Scatter(x=data['ages'], y=data['diff'], name=newnames['diff'], line=dict(color='blue', dash='solid'))
     trace4 = go.Scatter(x=data['ages'], y=[0]*len(data['ages']), name='Nul', line=dict(color='white', dash='solid'),showlegend=False)
     balance_fig = go.Figure([trace4,trace1, trace2, trace3])
