@@ -341,7 +341,7 @@ def update_fig(calculate_button, current_age, final_age, current_investments, ex
     balance_fig = go.Figure([trace4,trace1, trace2, trace3])
     balance_fig.update_xaxes(tickangle=45)
     balance_fig.update_yaxes(tickprefix='kr')
-    balance_fig.update_layout(title="Indtægter og udgifter", 
+    balance_fig.update_layout(title="Indtægter, udgifter og balance (efter skat)", 
                               xaxis_title="Alder", 
                               yaxis_title="Beløb", 
                               legend_title="Forklaring", 
