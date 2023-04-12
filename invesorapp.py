@@ -218,9 +218,9 @@ def update_fig(calculate_button, current_age, final_age, current_investments, ex
     expense_list = []
     for expense in expenses_container:
         expense_data = {
-            "expense": expense["props"]["children"][1]["props"]["value"],
-            "age_expense_start": expense["props"]["children"][3]["props"]["value"],
-            "age_expense_end": expense["props"]["children"][5]["props"]["value"]
+            "expense": expense["props"]["children"][3]["props"]["value"],
+            "age_expense_start": expense["props"]["children"][5]["props"]["value"],
+            "age_expense_end": expense["props"]["children"][7]["props"]["value"]
         }
         expense_list.append(expense_data)
     
@@ -238,9 +238,9 @@ def update_fig(calculate_button, current_age, final_age, current_investments, ex
     income_list = []
     for income in income_container:
         income_data = {
-            "income_before": income["props"]["children"][1]["props"]["value"],
-            "age_income_start": income["props"]["children"][3]["props"]["value"],
-            "age_income_end": income["props"]["children"][5]["props"]["value"]
+            "income_before": income["props"]["children"][3]["props"]["value"],
+            "age_income_start": income["props"]["children"][5]["props"]["value"],
+            "age_income_end": income["props"]["children"][7]["props"]["value"]
         }
         income_list.append(income_data)
         
