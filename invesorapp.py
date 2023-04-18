@@ -219,7 +219,7 @@ def modify_taxfree_container(add_clicks, remove_clicks, div_children):
         new_child = html.Div(children=[
             html.Label(f"Skattefri indtægt{len(div_children) + 1}: "),
             dcc.Input(id=f"taxfree-name-{len(div_children)}", type="text", className="form-control mb-3", value="Beskrivende tekst (valgfri)"),
-            html.Label("Beløb årligt (Før skat): "),
+            html.Label("Beløb årligt: "),
             dcc.Input(id=f"taxfree-{len(div_children)}", type="number", className="form-control mb-3"),
             html.Label("Alder hvor lønindtægt starter:"),
             dcc.Input(id=f"age-taxfree-start-{len(div_children)}", type="number", className="form-control mb-3"),
