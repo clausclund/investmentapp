@@ -42,14 +42,19 @@ app.layout = dbc.Container([
             dcc.Input(id="expected-inflation", type="number", value=2, className="form-control mb-3"),
         ], className="col-md-6"),
         dbc.Col([
-            html.H5("Årlige udgifter"),
-            html.Div(id = 'expenses_container', children=[]),
-            html.Button("Tilføj udgift", id="add-expense", n_clicks=0,className="btn btn-primary mb-3", style = {'width': '200px'}),
-            html.Button("Fjern sidste udgift", id="remove-expense", n_clicks=0, className="btn btn-danger mb-3",style = {'width': '200px'}),
             html.H5("Lønindtægter "),
             html.Div(id='income-container', children=[]),
             html.Button("Tilføj lønindtægt", id="add-income", n_clicks=0, className="btn btn-primary mb-3",style = {'width': '200px'}),
             html.Button("Fjern sidste lønindtægt", id="remove-income", className="btn btn-danger mb-3",style = {'width': '200px'}),
+            html.H5("Skattefri indtægter "),
+            html.Div(id='taxfree-container', children=[]),
+            html.Button("Tilføj skattefri", id="add-taxfree", n_clicks=0, className="btn btn-primary mb-3",style = {'width': '200px'}),
+            html.Button("Fjern sidste skattefri", id="remove-taxfree", className="btn btn-danger mb-3",style = {'width': '200px'}),
+            html.H5("Årlige udgifter"),
+            html.Div(id = 'expenses_container', children=[]),
+            html.Button("Tilføj udgift", id="add-expense", n_clicks=0,className="btn btn-primary mb-3", style = {'width': '200px'}),
+            html.Button("Fjern sidste udgift", id="remove-expense", n_clicks=0, className="btn btn-danger mb-3",style = {'width': '200px'}),
+            
             #html.Button("Kør beregningen", id="calculate-button", n_clicks=0, className="btn btn-success mb-3"),
             html.Div(id="results"),
         ], className="col-md-6")
@@ -104,42 +109,52 @@ app.layout = dbc.Container([
              
              Hvilken gennemsnitlig årlig inflation forventer du? Historisk set har der været 2-3%.
              
+             ##### Årlige Lønindtægter
+             
+             På samme måde som for udgifter, kan man specificere sin årlige lønindtægt i løbet af sin levetid.
+             Bemærk at lønindtægter skal angives før skat, da modellen tager højde for beskatning.
+             De første 48.000kr årligt beskattes således ikke men fratrækkes kun 8% i AM-bidrag. 
+             Alt fra 48.000kr til topskattegrænsen på 568.900 fratrækkes først 8% AM-bidrag og beskattes efterfølgende med 38%.
+             Alt over topskattegrænsen fratrækkes først 8% AM-bidrag, dernæst 15% topskat, og slutteligt 38% skat.
+             Man kan godt specificere overlappende indtægter.
+             Modellen har på nuværende tidspunkt ikke mulighed for at specificere andre typer indtægter.
+             Der er mulighed for at navngive de forskellige indtægter så man ikke mister overblikket.
+             
+             ##### Årlige skattefri indtægter
+             
+             Her kan yderligere indkomster som ikke skal beskattes indtastes. Det kunne eksempelvis være 
+             skattefri befordringsgodtgørelse for kørsel i egen bil. Hvis du har det bedst med selv at foretage
+             beregningen af beskatningen på din lønindkomst kan lønindkomster EFTER SKAT også indtastes her.
+             I så fald skal de IKKE også indtastes under årlige lønindtægter.
+             
+             
              ##### Årlige udgifter
             
-            Du har mulighed for at indtaste årlige udgifter (efter skat), i selvvalgte intervaller af levetiden.
-            Har man eksempelvis en forventning om at bruge 180.000kr årligt resten af livet kan man indtaste dette.
-            Man kan også tilføje flere udgifter hvis man regner med at have variable udgifter i sin levetid.
-            Det kunne eksempelvis være at man regner med at have en ekstra udgift på 60.000 kr årligt til barn
-            fra man er 30 år til man er 48 år. Man kan således godt specificere overlappende udgifter.
-            Der er mulighed for at navngive de forskellige udgifter så man ikke mister overblikket.
+             Du har mulighed for at indtaste årlige udgifter (efter skat), i selvvalgte intervaller af levetiden.
+             Har man eksempelvis en forventning om at bruge 180.000kr årligt resten af livet kan man indtaste dette.
+             Man kan også tilføje flere udgifter hvis man regner med at have variable udgifter i sin levetid.
+             Det kunne eksempelvis være at man regner med at have en ekstra udgift på 60.000 kr årligt til barn
+             fra man er 30 år til man er 48 år. Man kan således godt specificere overlappende udgifter.
+             Der er mulighed for at navngive de forskellige udgifter så man ikke mister overblikket.
             
-            ##### Årlige Lønindtægter
+
             
-            På samme måde som for udgifter, kan man specificere sin årlige lønindtægt i løbet af sin levetid.
-            Bemærk at lønindtægter skal angives før skat, da modellen tager højde for beskatning.
-            De første 48.000kr årligt beskattes således ikke men fratrækkes kun 8% i AM-bidrag. 
-            Alt fra 48.000kr til topskattegrænsen på 568.900 fratrækkes først 8% AM-bidrag og beskattes efterfølgende med 38%.
-            Alt over topskattegrænsen fratrækkes først 8% AM-bidrag, dernæst 15% topskat, og slutteligt 38% skat.
-            Man kan godt specificere overlappende indtægter.
-            Modellen har på nuværende tidspunkt ikke mulighed for at specificere andre typer indtægter.
-            Der er mulighed for at navngive de forskellige indtægter så man ikke mister overblikket.
+             ##### Investeringer
             
-            ##### Investeringer
-            
-            Modellen ser på de udgifter og indtægter som du har specificeret. Hvis dine lønindtægter efter
-            skat er højere end dine udgifter, så lægges hele overskuddet til dine investeringer.
-            Ønsker du at lægge noget til side til en opsparing, kan dette angives som en udgift.
-            Hvis dine lønindtægter ikke kan dække dine udgifter det pågældende år, 
-            fratrækked det nødvendige udtræk fra dine investeringer, for at kunne dække udgifterne efter skat.
-            Beregneren antager at dine aktiver står på et almindeligt aktiedepot og at du gør brug af
-            værdipapirer som er realisationsbeskattede. Modellen tager højde for en progressionsgrænse for realiseret afkast.
-            Alt afkast under progressionsgrænsen på 58.900kr beskattes med 27%. Alt afkast derover beskattes med 42%.
+             Modellen ser på de udgifter og indtægter som du har specificeret. Hvis dine lønindtægter efter
+             skat er højere end dine udgifter, så lægges hele overskuddet til dine investeringer.
+             Ønsker du at lægge noget til side til en opsparing, kan dette angives som en udgift.
+             Hvis dine lønindtægter ikke kan dække dine udgifter det pågældende år, 
+             fratrækked det nødvendige udtræk fra dine investeringer, for at kunne dække udgifterne efter skat.
+             Beregneren antager at dine aktiver står på et almindeligt aktiedepot og at du gør brug af
+             værdipapirer som er realisationsbeskattede. Modellen tager højde for en progressionsgrænse for realiseret afkast.
+             Alt afkast under progressionsgrænsen på 58.900kr beskattes med 27%. Alt afkast derover beskattes med 42%.
             
             '''))
     ])
 ])
 
-
+# callback for adding another expence
 @app.callback(
     Output("expenses_container", "children"), 
     [Input("add-expense", "n_clicks"), Input("remove-expense", "n_clicks")],
@@ -167,7 +182,7 @@ def modify_expenses_container(add_clicks, remove_clicks, div_children):
             div_children.pop()
 
     return div_children
-
+# callback for adding another taxable income
 @app.callback(
     Output("income-container", "children"), 
     [Input("add-income", "n_clicks"), Input("remove-income", "n_clicks")],
@@ -192,6 +207,32 @@ def modify_income_container(add_clicks, remove_clicks, div_children):
         if len(div_children) > 0:
             div_children.pop()
     return div_children
+# callback for adding a taxfree income
+@app.callback(
+    Output("taxfree-container", "children"), 
+    [Input("add-taxfree", "n_clicks"), Input("remove-taxfree", "n_clicks")],
+    [State('taxfree-container', 'children')]
+)
+def modify_taxfree_container(add_clicks, remove_clicks, div_children):
+    triggered_id = dash.callback_context.triggered[0]['prop_id']
+    if triggered_id == "add-taxfree.n_clicks":
+        new_child = html.Div(children=[
+            html.Label(f"Skattefri indtægt{len(div_children) + 1}: "),
+            dcc.Input(id=f"taxfree-name-{len(div_children)}", type="text", className="form-control mb-3", value="Beskrivende tekst (valgfri)"),
+            html.Label("Beløb årligt (Før skat): "),
+            dcc.Input(id=f"taxfree-{len(div_children)}", type="number", className="form-control mb-3"),
+            html.Label("Alder hvor lønindtægt starter:"),
+            dcc.Input(id=f"age-taxfree-start-{len(div_children)}", type="number", className="form-control mb-3"),
+            html.Label("Alder hvor lønindtægt ophører:"),
+            dcc.Input(id=f"age-taxfree-end-{len(div_children)}", type="number", className="form-control mb-3")
+        ])
+        div_children.append(new_child)
+    elif triggered_id == "remove-taxfree.n_clicks":
+        # Remove the last expense input field
+        if len(div_children) > 0:
+            div_children.pop()
+    return div_children
+
 
 @app.callback(
     Output('investment-chart', 'figure'),
@@ -204,14 +245,15 @@ def modify_income_container(add_clicks, remove_clicks, div_children):
     State('expected-yield', 'value'),
     State('expected-inflation', 'value'),
     State('expenses_container', 'children'),
-    State("income-container", "children")
+    State("income-container", "children"),
+    State("taxfree-container", "children")
     
 )
 
 
 def update_fig(calculate_button, current_age, final_age, current_investments, expected_yield, 
                    expected_inflation, expenses_container,
-                   income_container):
+                   income_container, taxfree_container):
     
     corrected_yield = expected_yield/100 - expected_inflation/100
     
@@ -244,8 +286,27 @@ def update_fig(calculate_button, current_age, final_age, current_investments, ex
         }
         income_list.append(income_data)
         
+    # taxfree income list
+    taxfree_list = []
+    for taxfree in taxfree_container:
+        taxfree_data = {
+            "taxfree": taxfree["props"]["children"][3]["props"]["value"],
+            "age_taxfree_start": taxfree["props"]["children"][5]["props"]["value"],
+            "age_taxfree_end": taxfree["props"]["children"][7]["props"]["value"]
+        }
+        taxfree_list.append(taxfree_data)
         
-        
+    total_taxfree_list = []
+    for age in range(current_age, final_age):
+        total_taxfree = 0
+        for taxfree in taxfree_list:
+            if taxfree["age_taxfree_start"] <= age < taxfree["age_taxfree_end"]:
+                total_taxfree += taxfree["taxfree"]
+        total_taxfree_list.append(total_taxfree)
+    
+    
+
+    
     # Calculate total income for each year
     total_income_before_list = []
     for age in range(current_age, final_age):
@@ -264,6 +325,11 @@ def update_fig(calculate_button, current_age, final_age, current_investments, ex
         total_income_after_list.append( 48000*0.92 + (total_income_before_list[i]-48000)*0.92*0.62)
       else:
         total_income_after_list.append( 48000*0.92 + (568900-48000)*0.92*0.62 + (total_income_before_list[i] - 568900)*0.92*0.85*0.62)
+    
+    #adding the taxfree income to the taxed income
+    for i in range(0, len(total_income_after_list)): 
+        total_income_after_list[i] = total_income_after_list[i] + total_taxfree_list[i]
+    print(total_income_after_list)
 
     # calculate the net of the incomes and expences for each year
     diff_list = []
